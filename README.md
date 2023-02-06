@@ -56,9 +56,11 @@ You can follow the steps above again to create a dummy pipeline based on the fil
 Key multiple jobs to how KEDA 
 
 Resources deployed:
+
 ![image](https://user-images.githubusercontent.com/12474226/216915593-39044b3b-aeb0-454d-a86e-0584e142bce9.png)
 
 Multiple agents created by KEDA after queuing multiple jobs:
+
 ![image](https://user-images.githubusercontent.com/12474226/216915815-7f0df19c-7cc8-4fb0-869f-892b9ea0b2f3.png)
 
 ## References
