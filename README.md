@@ -1,47 +1,70 @@
 # Deploying Azure DevOps Agents on Azure Container Apps
 
-[[_TOC_]]
+[TOC]
 
 ## Introduction
 
-This project provides a solution to modernize your pipeline infrastructure by migrating from IaaS pipelines infrastructure to PaaS. By using Azure Container Apps, you can optimize cloud costs by reducing the need for VMs. Additionally, you can leverage Kubernetes Event Driven Autoscaling (KEDA) to deploy more container apps based on the jobs queue length, allowing you to do more with less.
+This project provides an started solution to show how to modernize your AzDevOps pipeline infrastructure by migrating from IaaS to PaaS using Azure Container Apps.
+Optimize cloud costs by reducing the need for VMs. Additionally, it leverages Kubernetes Event Driven Autoscaling (KEDA) to deploy more container apps based on the jobs queue length.
+
+The project uses Azure DevOps pipelines and Bicep to deploy the required Azure resources. Before running the pipeline, you need to create the Azure DevOps Agent pool and an Azure DevOps library with some variables used to configure to agents. These 2 steps are executed manually following the instructions under the Configuration section. 
 
 ## Prerequisites
 
 - An Azure account
-- An Azure DevOps account with a Service Connection to your Azure account
+- An Azure DevOps account with a project and Service Connection to your Azure account
 
 ## Configuration
 
 1. Create an Azure DevOps Agent Pool:
-   - Log in to your Azure DevOps account
+   - Log in to your Azure DevOps account and go to your project
+   - Go to your project settings
    - Go to the "Agent Pools" section in the left-side menu
-   - Click on the "+ New Agent Pool" button
-   - Give the agent pool a name, for example, "azure-container-apps-pool"
+   - Click on the "Add Pool" button
+   - Select "new", type as "Self-hosted" and give the agent pool a name, for example, "azure-container-apps-pool".
+   - Click on "Create"
+   - Open the Pool and get the PoolId from the URL, you will need it next.
 
 2. Create an Azure DevOps Library:
-   - Log in to your Azure DevOps account
-   - Go to the "Libraries" section in the left-side menu
-   - Click on the "+ New definition" button
-   - Select "Azure DevOps Agent (Preview)"
+   - Log in to your Azure DevOps account and go to your project
+   - Go to the "Library" section in the left-side menu
+   - Click on the "+ Variable Group" button
    - Give the library a name, for example, "azdevops-agent-aca"
    - Fill in the following variables:
-     - `azpToken`
-     - `azpUrl`
-     - `azpPool`
-     - `azpPoolId`
+     - `azpToken` (pat token - make sure you make this variable a secret)
+     - `azpUrl` (url to your az devops project)
+     - `azpPool` (pool name given when creating the az devops agent pool)
+     - `azpPoolId` (pool id extracted earlier)
 
-## Instructions
+## Deployment
 
-To get started, follow these instructions to configure an Azure DevOps pipeline based on the `.yaml` in the repo:
+To deploy the Azure DevOps agents on Azure Container Apps, create a pipeline based on the .yaml file in this Github repository.
 
-1. Clone this repository to your local machine
-2. Navigate to the cloned repo
-3. Create the Azure DevOps library with the required variables
-4. Add the `.yaml` file to your Azure DevOps pipeline
-5. Run the pipeline
+Here are the instructions to create a pipeline:
 
-That's it! Your Azure DevOps agents are now deployed on Azure Container Apps.
+1. Go to your Azure DevOps organization's Pipelines.
+2. Click on New pipeline.
+3. Select the source control that contains the pipelines\azdevops-agent.yml.
+4. Follow the steps to authorize Azure DevOps to access your Github repository.
+5. Select the repository that contains the .yaml file.
+6. Select the pipelines\azdevops-agent.yml file.
+7. Click on Run.
+
+Wait until the pipeline finishes and that's it! Your Azure DevOps agents are now deployed on Azure Container Apps.
+
+You can follow the steps above again to create a dummy pipeline based on the file pipelines\dummy.yml and see the agent processing jobs.
+Key multiple jobs to how KEDA 
+
+Resources deployed:
+![image](https://user-images.githubusercontent.com/12474226/216915593-39044b3b-aeb0-454d-a86e-0584e142bce9.png)
+
+Multiple agents created by KEDA after queuing multiple jobs:
+![image](https://user-images.githubusercontent.com/12474226/216915815-7f0df19c-7cc8-4fb0-869f-892b9ea0b2f3.png)
+
+## References
+
+- [KEDA Azure Pipelines Scaler](https://keda.sh/docs/2.8/scalers/azure-pipelines/#authentication-parameters)
+- [Running self-hosted agents in Docker](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops)
 
 ## Contributions
 
