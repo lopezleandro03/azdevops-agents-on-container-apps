@@ -11,10 +11,9 @@ pool:
   name: azure-container-apps-pool
 
 steps:
-- script: echo Getting AzDevOps busy!
+- script: echo Getting AzDevOps pipelines busy!
   displayName: 'Run a one-line script'
 
 - script: |
-    echo This jobs are increasing the Job queue of AzDevOps what should result on
-    echo KEDA autoscaling test
-  displayName: 'KEDA autoscale'
+    echo 'Run something else for Azure Container Apps KEDA autoscaling to trigger...'
+  displayName: 'Run something else for KEDA to auto-scale'
