@@ -46,34 +46,34 @@ The project uses Azure DevOps pipelines and Bicep to deploy the required Azure r
 
 ## Agent Deployment
 
-To deploy the Azure DevOps agents on Azure Container Apps, create a pipeline based on the .yaml file in this Github repository.
+To deploy the Azure DevOps agents on Azure Container Apps, create a pipeline based on the `.yml` file in this Github repository.
 
 Here are the instructions to create a pipeline:
 
 1. Go to your Azure DevOps organization's Pipelines.
 2. Click on New pipeline.
-3. Select the source control that contains the pipelines\azdevops-agent.yml.
+3. Select the source control that contains the `pipelines\azdevops-agent.yml`.
 4. Follow the steps to authorize Azure DevOps to access your Github repository.
-5. Select the repository that contains the .yaml file.
-6. Select the pipelines\azdevops-agent.yml file.
+5. Select the repository that contains the `.yml` file.
+6. Select the `pipelines\azdevops-agent.yml` file.
 7. Run the pipeline. The first time you might need to authorize the pipeline to use the Azure Service Connection and the Library.
 
 Wait until the pipeline finishes and that's it! You have now set an Azure DevOps agent pool with auto-scaling agents running on Azure Container Apps.
 
 ## (Optional) Sample Pipeline Deployment
 
-Follow the steps below to create a dummy pipeline based on the file `pipelines\dummy.yml`
+Follow the steps below to create a dummy pipeline based on the file `pipelines\sample-pipeline.yml`
 This creates a starter pipeline that simply echo messages. You can use it to queue as many jobs you like and Kubernetes Events Driven Auto-scaling in action.
 
 1. Go to your Azure DevOps organization's Pipelines.
 2. Click on New pipeline.
-3. Select the source control that contains the pipelines\dummy.yml.
+3. Select the source control that contains the `pipelines\sample-pipeline.yml`.
 4. Follow the steps to authorize Azure DevOps to access your Github repository.
-5. Select the repository that contains the .yaml file.
-6. Select the pipelines\dummy.yml file.
+5. Select the repository that contains the `.yml` file.
+6. Select the `pipelines\sample-pipeline.yml` file.
 7. Run the pipeline. The first time you might need to authorize the pipeline to use the Azure Service Connection and the Library.
 
-You can use the Azure CLI DevOps extension to queue multiple jobs easily, the statement below assumes that your dummy pipeline id is 1.
+You can use the Azure CLI DevOps extension to queue multiple jobs easily, the statement below assumes that your dummy pipeline id is `1`.
 If you need help getting the Azure CLI DevOps extention, check out the references section.
 
 ```bash
