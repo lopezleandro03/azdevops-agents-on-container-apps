@@ -2,8 +2,10 @@
 
 ## Introduction
 
-This project provides an started solution to show how to modernize your AzDevOps pipeline infrastructure by migrating from IaaS to PaaS using Azure Container Apps.
-Optimize cloud costs by reducing the need for VMs. Additionally, it leverages Kubernetes Event Driven Autoscaling (KEDA) to deploy more container apps based on the jobs queue length.
+This project provides an starter solution to modernize your AzDevOps pipeline infrastructure by migrating from IaaS to PaaS using Azure Container Apps.
+Optimize cloud costs by reducing the need for VMs. Additionally, it uses Kubernetes Event Driven Autoscaling (KEDA) to auto-scale based on the jobs queue length.
+
+The Container Apps will be deployed in a Container App Environment injected into a vNet, which makes it easy to stablish private connectivity with your vnet aware resources.
 
 The project uses Azure DevOps pipelines and Bicep to deploy the required Azure resources. Before running the pipeline, you need to create the Azure DevOps Agent pool and an Azure DevOps library with some variables used to configure to agents. These 2 steps are executed manually following the instructions under the Configuration section. 
 
@@ -60,6 +62,12 @@ Resources deployed:
 Multiple agents created by KEDA after queuing multiple jobs:
 
 ![image](https://user-images.githubusercontent.com/12474226/216915815-7f0df19c-7cc8-4fb0-869f-892b9ea0b2f3.png)
+
+## Docker Container
+
+I created my own Docker Container to bootstrap the agent based on Microsoft doc: [Running self-hosted agents in Docker](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops).
+
+You might want to add extra layers to the container image to bake in the tools that you need.
 
 ## References
 
