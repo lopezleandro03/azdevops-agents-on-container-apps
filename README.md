@@ -1,7 +1,5 @@
 # Deploying Azure DevOps Agents on Azure Container Apps
 
-[TOC]
-
 ## Introduction
 
 This project provides an started solution to show how to modernize your AzDevOps pipeline infrastructure by migrating from IaaS to PaaS using Azure Container Apps.
