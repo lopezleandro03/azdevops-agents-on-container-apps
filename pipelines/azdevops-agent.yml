@@ -1,0 +1,32 @@
+# trigger:
+# - main
+
+name: Deploy AzDevOps agent on Azure Container Apps
+
+variables:
+  - group: azdevops-agent-aca
+  - name: azureServiceConnection
+    value: LeoAzureSandbox
+  - name: resourceGroupName
+    value: rg-azdevops-agent
+  - name: location
+    value: 'West Europe'
+  - name: templateFile
+    value: './bicep/main.bicep'
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: '$(azureServiceConnection)'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: '$(resourceGroupName)'
+    location: '$(location)'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(templateFile)'
+    overrideParameters: '-azpToken $(azpToken) -azpUrl $(azpUrl) -azpPool $(azpPool) -azpPoolId $(azpPoolId)'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
