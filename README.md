@@ -80,6 +80,8 @@ If you need help getting the Azure CLI DevOps extention, check out the reference
 1..10 | % { az pipelines run --id 1 }
 ```
 
+Parallel jobs restrictions might apply when attempting to run jobs at the same time. Check rhe references section to learn how to configure parallel jobs.
+
 ## Outcome
 
 If the pipeline ran successfully, you should see these resources deployed on the Azure resource group provided:
@@ -103,6 +105,7 @@ Additionally, you should push into a private container registry.
 - [KEDA Azure Pipelines Scaler](https://keda.sh/docs/2.8/scalers/azure-pipelines/#authentication-parameters)
 - [Running self-hosted agents in Docker](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops)
 - [Azure DevOps CLI](https://learn.microsoft.com/en-us/azure/devops/cli/?view=azure-devops)
+- [Azure DevOps Parallel jobs](https://learn.microsoft.com/en-us/azure/devops/pipelines/licensing/concurrent-jobs?view=azure-devops&tabs=ms-hosted)
 
 ## Contributions
 
