@@ -39,12 +39,12 @@ The project uses Azure DevOps pipelines and Bicep to deploy the required Azure r
 3. Set pipeline variables:
     - Fork this repo
     - Edit the file `pipelines\azdevops-agent.yml` and set the right values for:
-     - `group`
+     - `group` (must match the new library name)
      - `azureServiceConnection`
      - `resourceGroupName`
      - `location`
 
-## Deployment
+## Agent Deployment
 
 To deploy the Azure DevOps agents on Azure Container Apps, create a pipeline based on the .yaml file in this Github repository.
 
@@ -56,18 +56,37 @@ Here are the instructions to create a pipeline:
 4. Follow the steps to authorize Azure DevOps to access your Github repository.
 5. Select the repository that contains the .yaml file.
 6. Select the pipelines\azdevops-agent.yml file.
-7. Click on Run.
+7. Run the pipeline. The first time you might need to authorize the pipeline to use the Azure Service Connection and the Library.
 
-Wait until the pipeline finishes and that's it! Your Azure DevOps agents are now deployed on Azure Container Apps.
+Wait until the pipeline finishes and that's it! You have now set an Azure DevOps agent pool with auto-scaling agents running on Azure Container Apps.
 
-You can follow the steps above again to create a dummy pipeline based on the file pipelines\dummy.yml and see the agent processing jobs.
-Key multiple jobs to how KEDA 
+## (Optional) Sample Pipeline Deployment
 
-Resources deployed:
+Follow the steps below to create a dummy pipeline based on the file `pipelines\dummy.yml`
+This creates a starter pipeline that simply echo messages. You can use it to queue as many jobs you like and Kubernetes Events Driven Auto-scaling in action.
+
+1. Go to your Azure DevOps organization's Pipelines.
+2. Click on New pipeline.
+3. Select the source control that contains the pipelines\dummy.yml.
+4. Follow the steps to authorize Azure DevOps to access your Github repository.
+5. Select the repository that contains the .yaml file.
+6. Select the pipelines\dummy.yml file.
+7. Run the pipeline. The first time you might need to authorize the pipeline to use the Azure Service Connection and the Library.
+
+You can use the Azure CLI DevOps extension to queue multiple jobs easily, the statement below assumes that your dummy pipeline id is 1.
+If you need help getting the Azure CLI DevOps extention, check out the references section.
+
+```bash
+1..10 | % { az pipelines run --id 1 }
+```
+
+## Outcome
+
+If the pipeline ran successfully, you should see this resources deployed on the Azure resource group provided:
 
 ![image](https://user-images.githubusercontent.com/12474226/216915593-39044b3b-aeb0-454d-a86e-0584e142bce9.png)
 
-Multiple agents created by KEDA after queuing multiple jobs:
+Check the Azure DevOps agent pool UI to see how agents are provisioned and destroyed by Kubernetes based on the queue length:
 
 ![image](https://user-images.githubusercontent.com/12474226/216915815-7f0df19c-7cc8-4fb0-869f-892b9ea0b2f3.png)
 
@@ -81,6 +100,7 @@ You might want to add extra layers to the container image to bake in the tools t
 
 - [KEDA Azure Pipelines Scaler](https://keda.sh/docs/2.8/scalers/azure-pipelines/#authentication-parameters)
 - [Running self-hosted agents in Docker](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops)
+- [Azure DevOps CLI](https://learn.microsoft.com/en-us/azure/devops/cli/?view=azure-devops)
 
 ## Contributions
 
