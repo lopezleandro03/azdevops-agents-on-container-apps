@@ -3,16 +3,16 @@
 ## Introduction
 
 This project provides an starter solution to modernize your AzDevOps pipeline infrastructure by migrating from IaaS to PaaS using Azure Container Apps.
-Optimize cloud costs by reducing the need for VMs. Additionally, it uses Kubernetes Event Driven Autoscaling (KEDA) to auto-scale based on the jobs queue length.
+Optimize costs by reducing the need for VMs. Additionally, it uses Kubernetes Event Driven Autoscaling (KEDA) to auto-scale based on the jobs queue length.
 
-The Container Apps will be deployed in a Container App Environment injected into a vNet, which makes it easy to stablish private connectivity with your vnet aware resources.
+The Container Apps will be deployed in a Container App Environment injected into a vNet, which sets the foundation to stablish private connectivity with your vnet aware resources.
 
-The project uses Azure DevOps pipelines and Bicep to deploy the required Azure resources. Before running the pipeline, you need to create the Azure DevOps Agent pool and an Azure DevOps library with some variables used to configure to agents. These 2 steps are executed manually following the instructions under the Configuration section. 
+The project uses Azure DevOps pipelines and Bicep to deploy the required Azure resources. Before running the pipeline, you need to create the Azure DevOps Agent pool and an Azure DevOps library with some variables used to configure to agents. These 2 steps are executed manually following the instructions under the Configuration section.
 
 ## Prerequisites
 
 - An Azure account
-- An Azure DevOps account with a project and Service Connection to your Azure account
+- An Azure DevOps project and Service Connection to your Azure account
 
 ## Configuration
 
@@ -35,6 +35,14 @@ The project uses Azure DevOps pipelines and Bicep to deploy the required Azure r
      - `azpUrl` (url to your az devops project)
      - `azpPool` (pool name given when creating the az devops agent pool)
      - `azpPoolId` (pool id extracted earlier)
+
+3. Set pipeline variables:
+    - Fork this repo
+    - Edit the file `pipelines\azdevops-agent.yml` and set the right values for:
+     - `group`
+     - `azureServiceConnection`
+     - `resourceGroupName`
+     - `location`
 
 ## Deployment
 

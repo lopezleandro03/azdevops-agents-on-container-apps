@@ -4,13 +4,13 @@
 name: Deploy AzDevOps agent on Azure Container Apps
 
 variables:
-  - group: azdevops-agent-aca
+  - group: <az-devops-library-variable-group>
   - name: azureServiceConnection
-    value: LeoAzureSandbox
+    value: <service-connection>
   - name: resourceGroupName
-    value: rg-azdevops-agent
+    value: <resource-group>
   - name: location
-    value: 'West Europe'
+    value: '<region>'
   - name: templateFile
     value: './bicep/main.bicep'
 
