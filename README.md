@@ -82,7 +82,7 @@ If you need help getting the Azure CLI DevOps extention, check out the reference
 
 ## Outcome
 
-If the pipeline ran successfully, you should see this resources deployed on the Azure resource group provided:
+If the pipeline ran successfully, you should see these resources deployed on the Azure resource group provided:
 
 ![image](https://user-images.githubusercontent.com/12474226/216915593-39044b3b-aeb0-454d-a86e-0584e142bce9.png)
 
@@ -95,6 +95,8 @@ Check the Azure DevOps agent pool UI to see how agents are provisioned and destr
 I created my own Docker Container to bootstrap the agent based on Microsoft doc: [Running self-hosted agents in Docker](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops).
 
 You might want to add extra layers to the container image to bake in the tools that you need.
+
+Additionally, you should push into a private container registry.
 
 ## References
 
