@@ -1,16 +1,17 @@
-# trigger:
-# - main
-
 name: Deploy AzDevOps agent on Azure Container Apps
 
 variables:
+  # Replace the Variable group name with your own value
   - group: <az-devops-library-variable-group>
+
+  # Replace the variables with your own values
   - name: azureServiceConnection
     value: <service-connection>
   - name: resourceGroupName
     value: <resource-group>
   - name: location
     value: '<region>'
+    
   - name: templateFile
     value: './bicep/main.bicep'
 

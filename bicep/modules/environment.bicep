@@ -2,7 +2,6 @@ param name string
 param location string
 param vnetName string
 param infrastructureSubnetId string
-param runtimeSubnetId string
 param lawClientId string
 @secure()
 param lawClientSecret string
@@ -25,29 +24,13 @@ resource containerAppEnvironment 'Microsoft.App/managedEnvironments@2022-06-01-p
         sharedKey: lawClientSecret
       }
     }
-    // customDomainConfiguration: {
-    //   certificatePassword: any()
-    //   certificateValue: any()
-    //   dnsSuffix: 'string'
-    // }
-    // daprAIConnectionString: 'string'
-    // daprAIInstrumentationKey: 'string'
     vnetConfiguration: {
       internal: false
       infrastructureSubnetId: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, infrastructureSubnetId)
       dockerBridgeCidr: '10.2.0.1/16'
       platformReservedCidr: '10.1.0.0/16'
       platformReservedDnsIP: '10.1.0.2'
-      // runtimeSubnetId: resourceId('Microsoft.Network/virtualNetworks/subnets', vnetName, runtimeSubnetId)
     }
-    // workloadProfiles: [
-    //   {
-    //     maximumCount: int
-    //     minimumCount: int
-    //     workloadProfileType: 'string'
-    //   }
-    // ]
-    // zoneRedundant: bool
   }
 }
 
