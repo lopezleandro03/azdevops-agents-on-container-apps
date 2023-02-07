@@ -3,16 +3,16 @@
 ## Introduction
 
 This project provides an starter solution to modernize your AzDevOps pipeline infrastructure by migrating from IaaS to PaaS using Azure Container Apps.
-Optimize costs by reducing the need for VMs. Additionally, it uses Kubernetes Event Driven Autoscaling (KEDA) to auto-scale based on the jobs queue length.
+Optimizing costs by elinating user managed VMs. Additionally, it uses Kubernetes Event Driven Autoscaling (KEDA) to auto-scale based on the jobs queue length.
 
-The Container Apps will be deployed in a Container Apps Environment injected into a vNet, which sets the foundation to stablish private connectivity with workloads in the same integrated to same vNet or a peered vNet. The Environment is linked to an Azure Log Analytics Workspace for logging.
+The Container Apps will be deployed in a Container Apps Environment injected into a vNet, which sets the foundation to stablish private connectivity with workloads in the same vNet or a peered vNets. The Container Apps Environment sends logs and metrics to an Azure Log Analytics Workspace.
 
 ![image](https://user-images.githubusercontent.com/12474226/217368742-af15b4bd-1d73-403a-9fb6-94dec0db3f4b.png)
 
-**Azure Key Vault would be used to keep secrets secure but it's not included in the starter project.**
-**Azure Container Registry would be used to store container images but it's not included in the starter project(it is using DockerHub as the registry).**
+*Azure Key Vault would be used to keep secrets secure but it's not included in the starter project.*
+*Azure Container Registry would be used to store container images but it's not included in the starter project(it is using DockerHub as the registry).*
 
-The project uses Azure DevOps pipelines and Bicep to deploy the required Azure resources. Before running the pipeline, you need to create the Azure DevOps Agent pool and an Azure DevOps library with some variables used to configure to agents. These 2 steps are executed manually following the instructions under the Configuration section.
+This project uses Azure DevOps pipelines and Bicep to deploy the deploy Azure resources. Before deploying, create an Azure DevOps Agent pool and an Azure DevOps library with required variables that will be used during the agent configuration. These 2 steps are executed manually following the instructions under the `Configuration` section.
 
 ## Prerequisites
 
