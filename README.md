@@ -9,9 +9,7 @@ The Container Apps will be deployed in a Container Apps Environment injected int
 
 ![image](https://user-images.githubusercontent.com/12474226/217368742-af15b4bd-1d73-403a-9fb6-94dec0db3f4b.png)
 
-*Azure Key Vault would be used to keep secrets secure but it's not included in the starter project.*
-
-*Azure Container Registry would be used to store container images but it's not included in the starter project(it is using DockerHub as the registry).*
+*Azure Key Vault and Azure Container Registry are not included in this deployment.*
 
 This project uses Azure DevOps pipelines and Bicep to deploy the deploy Azure resources. Before deploying, create an Azure DevOps Agent pool and an Azure DevOps library with required variables that will be used during the agent configuration. These 2 steps are executed manually following the instructions under the `Configuration` section.
 
