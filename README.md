@@ -3,7 +3,7 @@
 ## Introduction
 
 This project provides an starter solution to modernize your AzDevOps pipeline infrastructure by migrating from IaaS to PaaS using Azure Container Apps.
-Optimizing costs by elinating user managed VMs. Additionally, it uses Kubernetes Event Driven Autoscaling (KEDA) to auto-scale based on the jobs queue length.
+Optimizing costs by eliminating user managed VMs. Additionally, it uses Kubernetes Event Driven Autoscaling (KEDA) to auto-scale based on the jobs queue length.
 
 The Container Apps will be deployed in a Container Apps Environment injected into a vNet, which sets the foundation to stablish private connectivity with workloads in the same vNet or a peered vNets. The Container Apps Environment sends logs and metrics to an Azure Log Analytics Workspace.
 
