@@ -4,3 +4,30 @@ summary: Linux Azure DevOps Agent
 description: Deploys an Linux Azure DevOps Agent on Azure Container Apps
 runner: ARM
 templatePath: azuredeploy.json
+parameters:
+- id: "containerImage"
+  name: "containerImage"
+  description: "AzDevOps Agent container image"
+  default: "docker.io/lopezleandro03/azdevops-agent-aca:v1"
+  type: "string"
+  required: false
+- id: "azpUrl"
+  name: "azpUrl"
+  description: "Azure DevOps project URL"
+  type: "string"
+  required: true
+- id: "azpPool"
+  name: "azpPool"
+  description: "Azure DevOps pool name"
+  type: "string"
+  required: true
+- id: "azpPoolId"
+  name: "azpPoolId"
+  description: "Azure DevOps pool ID"
+  type: "string"
+  required: true
+- id: "azpToken"
+  name: "azpToken"
+  description: "Azure DevOps token"
+  type: "string"
+  required: true
