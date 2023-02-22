@@ -13,7 +13,7 @@ variables:
     value: '<region>'
     
   - name: templateFile
-    value: './bicep/main.bicep'
+    value: './environment/azdevops-agent/main.bicep'
 
 pool:
   vmImage: ubuntu-latest

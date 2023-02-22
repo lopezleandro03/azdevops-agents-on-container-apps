@@ -27,6 +27,12 @@ resource containerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
         external: false
         targetPort: 8080
       }
+      secrets: [
+        {
+          name: 'azptoken'
+          value: azpToken
+        }
+      ]
     }
     managedEnvironmentId: containerAppEnvironmentId
     template: {
@@ -35,9 +41,8 @@ resource containerApp 'Microsoft.App/containerApps@2022-06-01-preview' = {
           env: [
             {
               name: 'AZP_TOKEN'
-              // Use secretRef to pull the token from Azure
-              // secretRef: 'string'
-              value: azpToken
+              // Use secretRef to avoid disclosing the token from the containerApp configuration UI
+              secretRef: 'azptoken'
             }
             {
               name: 'AZP_POOL'

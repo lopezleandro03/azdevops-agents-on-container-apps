@@ -104,12 +104,18 @@ You might want to add extra layers to the container image to bake in the tools t
 
 Additionally, you should push into a private container registry.
 
+## Limitations
+
+- Azure Container Apps currently supports only Linux containers.
+- Azure Container Apps Environments require a dedicated subnet with a CIDR range /23 or larger. Support for smaller subnets (/27) will be available on Public Preview on early April 2023.
+
 ## References
 
 - [KEDA Azure Pipelines Scaler](https://keda.sh/docs/2.8/scalers/azure-pipelines/#authentication-parameters)
 - [Running self-hosted agents in Docker](https://learn.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops)
 - [Azure DevOps CLI](https://learn.microsoft.com/en-us/azure/devops/cli/?view=azure-devops)
 - [Azure DevOps Parallel jobs](https://learn.microsoft.com/en-us/azure/devops/pipelines/licensing/concurrent-jobs?view=azure-devops&tabs=ms-hosted)
+- [Azure Container Apps Roadmap](https://github.com/orgs/microsoft/projects/540)
 
 ## Contributions
 
