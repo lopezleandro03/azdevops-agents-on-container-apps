@@ -1,0 +1,6 @@
+name: AzDevOpsAgent
+version: 1.0.0
+summary: Linux Azure DevOps Agent
+description: Deploys an Linux Azure DevOps Agent on Azure Container Apps
+runner: ARM
+templatePath: azuredeploy.json

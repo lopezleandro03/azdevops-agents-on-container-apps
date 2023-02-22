@@ -1,0 +1,430 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.14.46.61228",
+      "templateHash": "5996379976437112817"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "workloadName": {
+      "type": "string",
+      "defaultValue": "azdevops-agent"
+    },
+    "containerImage": {
+      "type": "string",
+      "defaultValue": "docker.io/lopezleandro03/azdevops-agent-aca:v1"
+    },
+    "azpUrl": {
+      "type": "string"
+    },
+    "azpPool": {
+      "type": "string"
+    },
+    "azpPoolId": {
+      "type": "string"
+    },
+    "azpToken": {
+      "type": "securestring"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "vnet",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "name": {
+            "value": "[format('vnet-{0}', parameters('workloadName'))]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.14.46.61228",
+              "templateHash": "10727704507766779048"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2021-08-01",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "10.0.0.0/16"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "sb-infra",
+                    "properties": {
+                      "addressPrefix": "10.0.16.0/21"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "outputs": {
+            "vNetName": {
+              "type": "string",
+              "value": "[parameters('name')]"
+            },
+            "infrastructureSubnetId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('name')), '2021-08-01').subnets[0].name]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "log-analytics-workspace",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "name": {
+            "value": "[format('law-{0}', parameters('workloadName'))]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.14.46.61228",
+              "templateHash": "11860691288884468523"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2020-03-01-preview",
+              "name": "[parameters('name')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "retentionInDays": 30,
+                "features": {
+                  "searchVersion": 1
+                },
+                "sku": {
+                  "name": "PerGB2018"
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "clientId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('name')), '2020-03-01-preview').customerId]"
+            },
+            "clientSecret": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', parameters('name')), '2020-03-01-preview').primarySharedKey]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "container-app-environment",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[format('cae-{0}', parameters('workloadName'))]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "lawClientId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'log-analytics-workspace'), '2020-10-01').outputs.clientId.value]"
+          },
+          "lawClientSecret": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'log-analytics-workspace'), '2020-10-01').outputs.clientSecret.value]"
+          },
+          "vnetName": {
+            "value": "[format('vnet-{0}', parameters('workloadName'))]"
+          },
+          "infrastructureSubnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'vnet'), '2020-10-01').outputs.infrastructureSubnetId.value]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.14.46.61228",
+              "templateHash": "6428456088339420336"
+            }
+          },
+          "parameters": {
+            "name": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            },
+            "vnetName": {
+              "type": "string"
+            },
+            "infrastructureSubnetId": {
+              "type": "string"
+            },
+            "lawClientId": {
+              "type": "string"
+            },
+            "lawClientSecret": {
+              "type": "securestring"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.App/managedEnvironments",
+              "apiVersion": "2022-06-01-preview",
+              "name": "[format('env-{0}', parameters('name'))]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "Leandro",
+                "workload": "AzureDevOps-Agents"
+              },
+              "sku": {
+                "name": "Consumption"
+              },
+              "properties": {
+                "appLogsConfiguration": {
+                  "destination": "log-analytics",
+                  "logAnalyticsConfiguration": {
+                    "customerId": "[parameters('lawClientId')]",
+                    "sharedKey": "[parameters('lawClientSecret')]"
+                  }
+                },
+                "vnetConfiguration": {
+                  "internal": false,
+                  "infrastructureSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('infrastructureSubnetId'))]",
+                  "dockerBridgeCidr": "10.2.0.1/16",
+                  "platformReservedCidr": "10.1.0.0/16",
+                  "platformReservedDnsIP": "10.1.0.2"
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "id": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.App/managedEnvironments', format('env-{0}', parameters('name')))]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'log-analytics-workspace')]",
+        "[resourceId('Microsoft.Resources/deployments', 'vnet')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2020-10-01",
+      "name": "[format('capp-{0}', parameters('workloadName'))]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "name": {
+            "value": "[parameters('workloadName')]"
+          },
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "containerAppEnvironmentId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'container-app-environment'), '2020-10-01').outputs.id.value]"
+          },
+          "containerImage": {
+            "value": "[parameters('containerImage')]"
+          },
+          "azpToken": {
+            "value": "[parameters('azpToken')]"
+          },
+          "azpUrl": {
+            "value": "[parameters('azpUrl')]"
+          },
+          "azpPool": {
+            "value": "[parameters('azpPool')]"
+          },
+          "azpPoolId": {
+            "value": "[parameters('azpPoolId')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.14.46.61228",
+              "templateHash": "10487832727207052465"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "containerAppEnvironmentId": {
+              "type": "string"
+            },
+            "containerImage": {
+              "type": "string"
+            },
+            "azpToken": {
+              "type": "securestring"
+            },
+            "azpUrl": {
+              "type": "string"
+            },
+            "azpPool": {
+              "type": "string"
+            },
+            "azpPoolId": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.App/containerApps",
+              "apiVersion": "2022-06-01-preview",
+              "name": "[format('capp-{0}', parameters('name'))]",
+              "location": "[parameters('location')]",
+              "tags": {
+                "owner": "Leandro",
+                "workload": "AzureDevOps-Agents"
+              },
+              "properties": {
+                "configuration": {
+                  "ingress": {
+                    "allowInsecure": false,
+                    "external": false,
+                    "targetPort": 8080
+                  },
+                  "secrets": [
+                    {
+                      "name": "azptoken",
+                      "value": "[parameters('azpToken')]"
+                    }
+                  ]
+                },
+                "managedEnvironmentId": "[parameters('containerAppEnvironmentId')]",
+                "template": {
+                  "containers": [
+                    {
+                      "env": [
+                        {
+                          "name": "AZP_TOKEN",
+                          "secretRef": "azptoken"
+                        },
+                        {
+                          "name": "AZP_POOL",
+                          "value": "[parameters('azpPool')]"
+                        },
+                        {
+                          "name": "AZP_URL",
+                          "value": "[parameters('azpUrl')]"
+                        }
+                      ],
+                      "image": "[parameters('containerImage')]",
+                      "name": "azdevops-agent"
+                    }
+                  ],
+                  "revisionSuffix": "azdevops-agent",
+                  "scale": {
+                    "maxReplicas": 10,
+                    "minReplicas": 2,
+                    "rules": [
+                      {
+                        "name": "jobsqueuelength",
+                        "custom": {
+                          "metadata": {
+                            "organizationURLFromEnv": "AZP_URL",
+                            "personalAccessTokenFromEnv": "AZP_TOKEN",
+                            "poolID": "[parameters('azpPoolId')]",
+                            "poolName": "[parameters('azpPool')]"
+                          },
+                          "type": "azure-pipelines"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "fqdn": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.App/containerApps', format('capp-{0}', parameters('name'))), '2022-06-01-preview').configuration.ingress.fqdn]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'container-app-environment')]"
+      ]
+    }
+  ]
+}
